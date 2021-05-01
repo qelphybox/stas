@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/qelphybox/stas/issues"
   },
-  "homepage": "https://github.com/qelphybox/stas#readme"
+  "homepage": "https://github.com/qelphybox/stas#readme",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.53.0"
+  }
 }
