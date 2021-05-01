@@ -2,8 +2,9 @@
   "name": "stas",
   "version": "1.0.0",
   "description": "Telegram bot manages youtube playlist from chat",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
+    "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,6 +23,7 @@
   },
   "homepage": "https://github.com/qelphybox/stas#readme",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "node-telegram-bot-api": "^0.53.0"
   }
 }
