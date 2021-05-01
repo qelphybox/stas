@@ -24,6 +24,7 @@
   "homepage": "https://github.com/qelphybox/stas#readme",
   "dependencies": {
     "dotenv": "^8.2.0",
+    "googleapis": "^73.0.0",
     "node-fetch": "^2.6.1",
     "node-telegram-bot-api": "^0.53.0"
   },

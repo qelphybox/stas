@@ -1,7 +1,7 @@
 const youtube = require('./index')
 
-test("test", () => {
+test("test", async () => {
     console.log(
-        youtube.checkIfPlaylistExists("PLU07HAmXSEyc7ROmO4pVsnVcr5_rfjHQP")
+        await youtube.checkIfPlaylistExists("PLU07HAmXSEyc7ROmO4pVsnVcr5_rfjHQP")
     )
 })
