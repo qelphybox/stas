@@ -1,0 +1,24 @@
+{
+  "name": "stas",
+  "version": "1.0.0",
+  "description": "Telegram bot manages youtube playlist from chat",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qelphybox/stas.git"
+  },
+  "keywords": [
+    "youtube",
+    "telegram-bot",
+    "telegram"
+  ],
+  "author": "ThreeOldMen.io",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/qelphybox/stas/issues"
+  },
+  "homepage": "https://github.com/qelphybox/stas#readme"
+}
