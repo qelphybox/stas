@@ -5,6 +5,7 @@ Telegram bot manages youtube playlist from chat
 ## Run
 
 ```bash
-cat "TELEGRAM_BOT_TOKEN=yourtoken" > .env
+cp .env.sample .env
+# please fill configuration manually in .env
 npm start
 ```
