@@ -1,4 +1,4 @@
-const youtube = require('./index')
+const youtube = require('./youtube')
 
 test("test", async () => {
     console.log(
