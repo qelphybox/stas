@@ -1,29 +1,29 @@
 const http = require('http')
-const querystring = require('querystring')
+const url = require('url');
+const gapi = require('./gapi')
 
 class CallbackServer {
     #server;
-    #youtube;
 
     constructor() {
-        // FIXME: youtube service constrained is a singleton for now, but proper DI should be considered
-        // this.#youtube = require('./youtube')
         this.#server = http.createServer(
             this.#oAuth2Listener
         )
     }
 
-    async #oAuth2Listener(req, res) {
-        const queryObj = querystring.parse(req.qs);
-        // this.#youtube.submitConsentCode(queryObj.code)
-        res.end("Unimplemented yet")
+    #oAuth2Listener(req, res) {
+        // FIXME deprecated
+        const queryObj = url.parse(req.url, true).query;
+        gapi.submitAuthCode(queryObj.code)
+            .then(() => res.end("OK"))
+            .catch(() => res.end("UNFORTUNATELY, NOT OK"))
     }
 
     async start() {
         this.#serverIfValid()
             .then((aliveServer) => {
                 aliveServer.listen(
-                    process.env.CALLBACK_SERVER_PORT
+                    process.env.PORT
                 )
             })
             .catch(console.error)
