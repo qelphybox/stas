@@ -1,6 +1,8 @@
 const { Client } = require('pg');
 
 class DB {
+  client
+
   constructor(uri) {
     this.client = new Client({
       connectionString: uri
