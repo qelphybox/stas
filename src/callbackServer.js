@@ -16,7 +16,7 @@ class CallbackServer {
         const queryObj = url.parse(req.url, true).query;
         gapi.submitAuthCode(queryObj.code)
             .then(() => res.end("OK"))
-            .catch(() => res.end("UNFORTUNATELY, NOT OK"))
+            .catch((err) => res.end(`UNFORTUNATELY, NOT OK: ${err}`))
     }
 
     async start() {

@@ -1,9 +1,19 @@
+const fs = require('fs');
+
 const { google } = require('googleapis');
 
-const IN_MEMORY_STORAGE = {
-    _tokens: null,
-    hasTokens() { return IN_MEMORY_STORAGE._tokens != null },
-    setTokens(tokens) { IN_MEMORY_STORAGE._tokens = tokens },
+// FIXME: make methods async (heavy ones)
+const FILE_STORAGE = {
+    readTokens() {
+        if (!fs.existsSync('__credentials.json'))
+            return false
+
+        const content = fs.readFileSync('__credentials.json', 'utf8')
+        return JSON.parse(content)
+    },
+    updateTokens(tokens) {
+        fs.writeFileSync('__credentials.json', JSON.stringify(tokens))
+    },
 }
 
 const SCOPES = [
@@ -19,29 +29,33 @@ class Gapi {
     );
 
     constructor() {
+
         this.oAuth2Client.on('tokens', (tokens) => {
-            console.log('ON tokens:')
-            console.log(tokens)
-            IN_MEMORY_STORAGE.setTokens(tokens)
+            FILE_STORAGE.updateTokens(tokens)
         });
+
+        this.oAuth2Client.setCredentials(
+            FILE_STORAGE.readTokens()
+        )
+
     }
 
-    needsAuthCode() {
-        if (IN_MEMORY_STORAGE.hasTokens())
+    async needsAuthCode() {
+        const hasTokens = FILE_STORAGE.readTokens() !== false
+        if (hasTokens)
             return null
 
         return this.oAuth2Client.generateAuthUrl({
             access_type: 'offline',
+            prompt: 'consent', // FIXME: here for testing purposes
             scope: SCOPES.join(','),
         })
     }
 
     async submitAuthCode(code) {
         const { tokens } = await this.oAuth2Client.getToken(code)
-        console.log('NEW tokens:')
-        console.log(tokens)
         this.oAuth2Client.setCredentials(tokens)
-        IN_MEMORY_STORAGE.setTokens(tokens)
+        FILE_STORAGE.updateTokens(tokens)
     }
 
 }
