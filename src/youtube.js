@@ -16,17 +16,16 @@ class YoutubeManager {
     }
 
     async follow(chatId, playlistUrl) {
+
         const playlistId = YoutubeManager.#extractPlaylistId(playlistUrl)
         if (!playlistId) {
             return new this.Answer.Error(`No Playlist ID extracted from URL: ${playlistUrl}`)
         }
 
-
         const authUrl = await gapi.needsAuthCode()
             .catch(err => {
                 return new this.Answer.Error(err)
             })
-
         if (authUrl) {
             return new this.Answer.Unauthorized(authUrl)
         }
@@ -39,7 +38,7 @@ class YoutubeManager {
         if (response.data.items.length === 1) {
             return new this.Answer.OK('GREAT SUCCESS!')
         } else {
-            return new this.Answer.OK('PLAYLIST NOT FOUND: ' + playlistId)
+            return new this.Answer.OK('PLAYLIST NOT FOUND: ' + playlistId) // FIXME: NOT OK
         }
 
     }
