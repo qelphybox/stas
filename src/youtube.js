@@ -7,30 +7,28 @@ const youtube = google.youtube({
     version: 'v3'
 })
 
-
-
 class YoutubeManager {
 
-    static Answer = class {
-        static OK = class { constructor(data) { this.data = data } }
-        static Unauthorized = class { constructor(authUrl) { this.authUrl = authUrl } }
-        static Error = class { constructor(reason) { this.reason = reason } }
+    Answer = class {
+        static OK = class { data; constructor(data) { this.data = data } }
+        static Unauthorized = class { authUrl; constructor(authUrl) { this.authUrl = authUrl } }
+        static Error = class { reason; constructor(reason) { this.reason = reason } }
     }
 
     async follow(chatId, playlistUrl) {
         const playlistId = YoutubeManager.#extractPlaylistId(playlistUrl)
         if (!playlistId) {
-            return new YoutubeManager.Answer.Error(`No Playlist ID extracted from URL: ${playlistUrl}`)
+            return new this.Answer.Error(`No Playlist ID extracted from URL: ${playlistUrl}`)
         }
 
 
         const authUrl = await gapi.needsAuthCode()
             .catch(err => {
-                return new YoutubeManager.Answer.Error(err)
+                return new this.Answer.Error(err)
             })
 
         if (authUrl) {
-            return new YoutubeManager.Answer.Unauthorized(authUrl)
+            return new this.Answer.Unauthorized(authUrl)
         }
 
         const response = await youtube.playlists.list({
@@ -39,9 +37,9 @@ class YoutubeManager {
         })
 
         if (response.data.items.length === 1) {
-            return new YoutubeManager.Answer.OK('GREAT SUCCESS!')
+            return new this.Answer.OK('GREAT SUCCESS!')
         } else {
-            return new YoutubeManager.Answer.OK('PLAYLIST NOT FOUND: ' + playlistId)
+            return new this.Answer.OK('PLAYLIST NOT FOUND: ' + playlistId)
         }
 
     }
