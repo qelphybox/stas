@@ -3,7 +3,9 @@
 Telegram bot manages youtube playlist from chat
 
 ## Run
+
 Requires node v16.0.0
+
 ```bash
 npm install
 cp .env.sample .env
@@ -20,12 +22,14 @@ docker run \
   --name stas-postgres \
   -d \
   postgres:13.2-alpine
-  
+
 npm start
 ```
 
 ## Deploy
+
 Push main to deploy
+
 ```bash
 git push origin main
 ```
