@@ -1,6 +1,6 @@
-const { client } = require('./db')
-
 const { google } = require('googleapis')
+
+const { readDictValue, updateDictValue } = require('./repository')
 
 const SCOPES = ['https://www.googleapis.com/auth/youtube']
 
@@ -25,7 +25,7 @@ class Gapi {
   }
 
   async needsAuthCode() {
-    const hasTokens = (await readTokens()) !== false
+    const hasTokens = await readTokens()
     if (hasTokens) return null
 
     return this.oAuth2Client.generateAuthUrl({
@@ -40,33 +40,14 @@ class Gapi {
     const fullTokens = await updateTokens(tokens)
     this.oAuth2Client.setCredentials(fullTokens)
   }
-
-  async _internal_dropToken() {
-    await client.query(UPSERT_EXEC, [''])
-  }
 }
 
 // persists
 
-const FIND_ONE_QUERY = `
-    select value
-    from stas_dict
-    where key = 'token'
-`
-
-const UPSERT_EXEC = `
-    insert into stas_dict(key, value)
-    values('token', $1::text)
-    on conflict (key) do update set value = $1::text
-`
+const DICT_KEY = 'gapi_token'
 
 async function readTokens() {
-  const tokenResponse = await client.query(FIND_ONE_QUERY)
-  if (tokenResponse.rows.length === 1 && tokenResponse.rows[0].value) {
-    return JSON.parse(tokenResponse.rows[0].value)
-  } else {
-    return false
-  }
+  return JSON.parse(await readDictValue(DICT_KEY))
 }
 
 async function updateTokens(tokens) {
@@ -76,7 +57,7 @@ async function updateTokens(tokens) {
       tokens.refresh_token = current.refresh_token
     }
   }
-  await client.query(UPSERT_EXEC, [JSON.stringify(tokens)])
+  await updateDictValue(DICT_KEY, JSON.stringify(tokens))
   return tokens
 }
 
