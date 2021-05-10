@@ -28,7 +28,7 @@ async function readDictValue(key) {
 }
 
 async function updateDictValue(key, value) {
-  if (value) {
+  if (value !== null) {
     return await client.query(DICT_UPSERT_EXEC, [key, value])
   } else {
     return await client.query(DICT_DELETE_EXEC, [key])

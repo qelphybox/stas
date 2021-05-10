@@ -3,7 +3,7 @@ const { google } = require('googleapis')
 const gapi = require('./gapi')
 const { readDictValue, updateDictValue } = require('./repository')
 
-const EXTRACT_PLAYLIST_ID_PATTERN = /^https?:\/\/(www\.)?youtube\.com\/playlist\?.*list=([^&]+)/gi
+const EXTRACT_PLAYLIST_ID_PATTERN = /^https?:\/\/(?:www\.)?youtube\.com\/playlist\?.*list=([^&]+)/gi
 const EXTRACT_VIDEO_ID_PATTERN = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/gi
 
 const VIDEO_IN_PLAYLIST_SNIPPET_FN = (playlistId, videoId) => `{
