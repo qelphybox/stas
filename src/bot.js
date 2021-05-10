@@ -1,4 +1,5 @@
-const youtubeManager = require('./youtube_stub')
+const gapi = require('./gapi')
+const youtube = require('./youtube')
 const TelegramBot = require('node-telegram-bot-api')
 
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, {
@@ -23,10 +24,14 @@ bot.onText(/\/follow(.*)/, async (msg, match) => {
   }
 
   try {
-    await youtubeManager.follow(chatId, url)
+    await youtube.follow(chatId, url)
   } catch (err) {
-    console.error(`Chat ${chatId} can not follow ${url}: ${err}`)
-    await respond("😰 Sorry, there is unexpected error. I'm broken.")
+    if (err instanceof gapi.Unauthorized) {
+      await respond(`Please follow the authorization link: ${err.auth}`)
+    } else {
+      console.error(`Chat ${chatId} can not follow ${url}: ${err}`)
+      await respond("😰 Sorry, there is unexpected error. I'm broken.")
+    }
   }
 
   await respond('Yeah! Try to /add links youtube')
@@ -35,12 +40,13 @@ bot.onText(/\/follow(.*)/, async (msg, match) => {
 bot.onText(/\/add.+(https:\/\/(www\.youtube\.com|youtu\.be)\/\S+)/, async (msg, match) => {
   const videoUrl = match[1]
   const chatId = msg.chat.id
-
-  if (!(await youtubeManager.isFollowing(chatId))) {
-    return
+  try {
+    await youtube.append(chatId, videoUrl)
+  } catch (err) {
+    if (err.message.startsWith('No playlist followed')) {
+      await bot.sendMessage(chatId, "No playlist found to append. Use /follow");
+    }
   }
-
-  await youtubeManager.addToFollowing(chatId, videoUrl)
 })
 
 module.exports = bot
