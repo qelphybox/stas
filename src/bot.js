@@ -44,7 +44,7 @@ bot.onText(/\/add.+(https:\/\/(www\.youtube\.com|youtu\.be)\/\S+)/, async (msg, 
     await youtube.append(chatId, videoUrl)
   } catch (err) {
     if (err.message.startsWith('No playlist followed')) {
-      await bot.sendMessage(chatId, "No playlist found to append. Use /follow");
+      await bot.sendMessage(chatId, 'No playlist found to append. Use /follow')
     }
   }
 })

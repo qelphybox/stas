@@ -4,10 +4,11 @@
   "description": "Telegram bot manages youtube playlist from chat",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node src/web_server.js",
     "test": "jest",
-    "prettier-check": "npx prettier --check .",
-    "prettier-write": "npx prettier --write ."
+    "bot:start": "node src/index.js",
+    "prettier-check": "npx prettier --check src",
+    "prettier-write": "npx prettier --write src"
   },
   "repository": {
     "type": "git",
