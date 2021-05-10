@@ -3,7 +3,7 @@ const { google } = require('googleapis')
 const gapi = require('./gapi')
 const { readDictValue, updateDictValue } = require('./repository')
 
-const EXTRACT_PLAYLIST_ID_PATTERN = /^https?:\/\/www.youtube.com\/playlist\?.*list=([^&]+)/gi
+const EXTRACT_PLAYLIST_ID_PATTERN = /^https?:\/\/(www\.)?youtube\.com\/playlist\?.*list=([^&]+)/gi
 const EXTRACT_VIDEO_ID_PATTERN = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/gi
 
 const VIDEO_IN_PLAYLIST_SNIPPET_FN = (playlistId, videoId) => `{
@@ -53,12 +53,6 @@ class YoutubeManager {
     const videoId = extractVideoId(videoUrl)
     if (!videoId) {
       throw Error(`No Video ID can be extracted from URL: ${videoUrl}`)
-    }
-
-    const authUrl = await gapi.needsAuthCode()
-    if (authUrl) {
-      throw new gapi.Unauthorized(authUrl)
-      d
     }
 
     const playlistId = await readPlaylistIdByChatId(chatId)

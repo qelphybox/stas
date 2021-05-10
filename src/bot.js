@@ -27,7 +27,7 @@ bot.onText(/\/follow(.*)/, async (msg, match) => {
     await youtube.follow(chatId, url)
   } catch (err) {
     if (err instanceof gapi.Unauthorized) {
-      await respond(`Please follow the authorization link: ${err.auth}`)
+      await respond(`Please follow the authorization link: ${err.authUrl}`)
     } else {
       console.error(`Chat ${chatId} can not follow ${url}: ${err}`)
       await respond("😰 Sorry, there is unexpected error. I'm broken.")
