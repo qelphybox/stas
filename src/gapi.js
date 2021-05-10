@@ -47,13 +47,18 @@ class Gapi {
 const DICT_KEY = 'gapi_token'
 
 async function readTokens() {
-  return JSON.parse(await readDictValue(DICT_KEY))
+  const tokens = await readDictValue(DICT_KEY)
+  if (tokens !== null) {
+    return JSON.parse(tokens)
+  } else {
+    return null
+  }
 }
 
 async function updateTokens(tokens) {
   if (!tokens.refresh_token) {
     const current = await readTokens()
-    if (current.refresh_token) {
+    if (current && current.refresh_token) {
       tokens.refresh_token = current.refresh_token
     }
   }

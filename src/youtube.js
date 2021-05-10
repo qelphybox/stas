@@ -29,7 +29,7 @@ class YoutubeManager {
     }
 
     const authUrl = await gapi.needsAuthCode()
-    if (authUrl) {
+    if (authUrl !== null) {
       throw new gapi.Unauthorized(authUrl)
     }
 
